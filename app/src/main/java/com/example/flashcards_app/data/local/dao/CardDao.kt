@@ -30,8 +30,11 @@ interface CardDao{
     fun getAllCards() : Flow<List<CardEntity>>
 
     @Query("select * from cards where id = :id")
-    suspend fun getCardById(id: Int) : CardEntity?
+    fun getCardById(id: Int) : CardEntity?
 
     @Query("SELECT * FROM cards WHERE isLearned = 0")
     fun getCardsToReview(): Flow<List<CardEntity>>
+
+    @Query("SELECT * FROM cards WHERE isLearned = 1")
+    fun getStudiedCards() : Flow<List<CardEntity>>
 }

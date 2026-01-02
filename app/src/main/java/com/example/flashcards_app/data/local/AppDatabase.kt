@@ -7,7 +7,7 @@ import com.example.flashcards_app.data.local.dao.DeckDao
 import com.example.flashcards_app.data.local.entity.CardEntity
 import com.example.flashcards_app.data.local.entity.DeckEntity
 
-@Database(entities = [DeckEntity:: class, CardEntity::class], version = 1)
+@Database(entities = [DeckEntity:: class, CardEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase(){
     abstract val deckDao: DeckDao
     abstract val cardDao: CardDao

@@ -19,5 +19,6 @@ data class CardEntity (
     val deckId: Int,
     val question: String,
     val answer: String,
-    val isLearned: Boolean = false
+    val isLearned: Boolean = false,
+    val isViewed: Boolean = false
 )
