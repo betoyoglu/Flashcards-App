@@ -25,8 +25,8 @@ interface DeckDao{
 
     @Query("""
     SELECT 
-        d.id as deckId, 
-        d.name as deckName,
+        d.id as id, 
+        d.name as name,
         COUNT(c.id) as totalCards,
         COUNT(CASE WHEN c.isViewed = 1 THEN 1 END) as viewedCards,
         COUNT(CASE WHEN c.isViewed = 1 AND c.isLearned = 0 THEN 1 END) as reviewCount

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flashcards_app.data.local.entity.CardEntity
 import com.example.flashcards_app.data.local.entity.DeckEntity
+import com.example.flashcards_app.data.model.DeckSummary
 import com.example.flashcards_app.data.repository.CardRepository
 import com.example.flashcards_app.data.repository.DeckRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DashboardViewModel @Inject constructor(private val cardRepository: CardRepository, private val deckRepository: DeckRepository) : ViewModel() {
     //all decks
-    private val _decks = MutableStateFlow<List<DeckEntity>>(emptyList())
+    private val _decks = MutableStateFlow<List<DeckSummary>>(emptyList())
     val decks = _decks.asStateFlow()
 
     //all cards
@@ -41,7 +42,7 @@ class DashboardViewModel @Inject constructor(private val cardRepository: CardRep
     private fun fetchDecks() {
         viewModelScope.launch {
             try {
-                deckRepository.getAllDecks().collect { decks ->
+                deckRepository.getDecksWithStats().collect { decks ->
                     _decks.value = decks
                 }
             } catch (e: Exception) {
