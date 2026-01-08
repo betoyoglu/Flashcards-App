@@ -1,7 +1,14 @@
 package com.example.flashcards_app
 
 import android.app.Application
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class FlashCardApp : Application()
+class FlashCardApp : Application(){
+    override fun onCreate() {
+        super.onCreate()
+        PDFBoxResourceLoader.init(applicationContext)
+    }
+
+}

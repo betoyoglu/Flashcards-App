@@ -109,7 +109,7 @@ fun UploadScreen(
                         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable{
+                    .clickable {
                         //pdf picker
                         pdfPickerLauncher.launch("application/pdf")
                     },
@@ -158,7 +158,10 @@ fun UploadScreen(
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
-                onClick = onSaveClick,
+                onClick = {
+                    viewModel.generateFlashcards()
+                    onSaveClick
+                },
                 enabled = deckName.isNotBlank() && pdfUri !=null, //deck adı boş değilse ve pdf seçilmişse
                 modifier = Modifier
                     .fillMaxWidth()
