@@ -18,6 +18,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.flashcards_app.ui.components.BottomBar
 import com.example.flashcards_app.ui.screens.dashboard.DashboardScreen
+import com.example.flashcards_app.ui.screens.upload.UploadScreen
 
 @Composable
 fun Navigation(){
@@ -35,7 +36,7 @@ fun Navigation(){
         floatingActionButton = {
             if(currentRoute == BottomNavItem.Dashboard.route){
                 LargeFloatingActionButton(
-                    onClick = {},
+                    onClick = {navController.navigate("create_deck")},
                     shape = CircleShape
                 ) {
                     Icon(Icons.Filled.Create, "add")
@@ -50,6 +51,14 @@ fun Navigation(){
         ){
             composable(BottomNavItem.Dashboard.route){
                 DashboardScreen(navController = navController, viewModel = hiltViewModel())
+            }
+            composable(FabNav.CreateDeck){
+                UploadScreen(
+                    onBackClick = { navController.popBackStack() },
+                    onSaveClick = {
+                        navController.popBackStack()
+                    }
+                )
             }
         }
     }
