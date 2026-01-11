@@ -1,11 +1,12 @@
 package com.example.flashcards_app.data.remote
 
-import com.google.ai.client.generativeai.GenerativeModel
 import com.example.flashcards_app.BuildConfig
+import com.google.ai.client.generativeai.GenerativeModel
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 class AIDataSource @Inject constructor(){
-    suspend fun getFlashcardsFromText(text: String, deckName:String) : String{
+    suspend fun getFlashcardsFromText(text: String, deckName:String) : List<AIResponse>{
         val generativeModel = GenerativeModel(
             modelName = "gemini-2.5-flash",
             apiKey = BuildConfig.GEMINI_API_KEY
@@ -28,7 +29,18 @@ class AIDataSource @Inject constructor(){
             $text
         """.trimIndent()
 
-        val response = generativeModel.generateContent(prompt)
-        return response.text ?: ""
+        try {
+            val response = generativeModel.generateContent(prompt)
+            val rawJson = response.text ?: ""
+
+            val cleanJson = rawJson.replace("```json", "").replace("```", "").trim()
+
+            return Json.decodeFromString<List<AIResponse>>(cleanJson)
+        }catch (e: Exception){
+            e.printStackTrace()
+            println("AI Hatası: ${e.message}")
+
+            return emptyList()
+        }
     }
 }

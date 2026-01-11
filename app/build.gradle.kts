@@ -1,9 +1,18 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.hiltAndroid)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
 }
 
 android {
@@ -19,7 +28,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "GEMINI_API_KEY", "\"${project.findProperty("GEMINI_API_KEY")}\"")
+        val apiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
+        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -44,6 +54,10 @@ android {
     }
 }
 
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -65,11 +79,11 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // Retrofit (İnternet)
+    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
 
-    // Coil (Resim)
+    // Coil
     implementation(libs.coil.compose)
 
     // Navigation & ViewModel
@@ -87,4 +101,9 @@ dependencies {
 
     // Android PDFBox
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
+    implementation(libs.kotlinx.serialization.json)
+
+    implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
+
 }

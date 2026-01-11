@@ -1,6 +1,7 @@
 package com.example.flashcards_app.data.repository
 
 import com.example.flashcards_app.data.remote.AIDataSource
+import com.example.flashcards_app.data.remote.AIResponse
 import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.text.PDFTextStripper
 import kotlinx.coroutines.Dispatchers
@@ -12,14 +13,14 @@ class AIRepository @Inject constructor(
     private val aiDataSource: AIDataSource
 
 ){
-    suspend fun generateFlashcards(file: File, deckName:String) : String = withContext(Dispatchers.IO){
+    suspend fun generateFlashcards(file: File, deckName:String) : List<AIResponse> = withContext(Dispatchers.IO){
         val pdfText = extractTextFromPDF(file)
 
         if (pdfText.isBlank()) {
-            return@withContext "Hata: PDF içeriği boş veya okunamadı."
+            return@withContext emptyList()
         }
 
-        // 2. Metni AI'a gönder
+        //  Metni AI'a gönder
         return@withContext aiDataSource.getFlashcardsFromText(pdfText, deckName)
     }
 
@@ -35,4 +36,5 @@ class AIRepository @Inject constructor(
             ""
         }
     }
+
 }
