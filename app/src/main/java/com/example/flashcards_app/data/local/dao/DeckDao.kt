@@ -12,12 +12,12 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface DeckDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertDeck(deck: DeckEntity)
+    suspend fun insertDeck(deck: DeckEntity) : Long
 
     @Delete
     suspend fun deleteDeck(deck: DeckEntity)
 
-    @Query("select * from decks")
+    @Query("select * from decks order by id desc")
     fun getAllDecks() : Flow<List<DeckEntity>>
 
     @Query("select * from decks where id = :id")

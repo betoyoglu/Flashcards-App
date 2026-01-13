@@ -11,7 +11,7 @@ class CardRepository @Inject constructor(
     suspend fun insertCard(card: CardEntity){
         return cardDao.insertCard(card)
     }
-    suspend fun insertCards(cards: List<CardEntity>){
+    suspend fun saveCards(cards: List<CardEntity>){
         return cardDao.insertCards(cards)
     }
 
@@ -21,6 +21,14 @@ class CardRepository @Inject constructor(
 
     suspend fun updateCard(card: CardEntity){
         return cardDao.updateCard(card)
+    }
+
+    suspend fun updateCardStatus(card: CardEntity, isLearned: Boolean){
+        val updatedCard = card.copy(
+            isLearned = isLearned,
+            isViewed = true
+        )
+        cardDao.updateCard(updatedCard)
     }
 
     fun getCardsByDeckId(deckId: Int) : Flow<List<CardEntity>>{

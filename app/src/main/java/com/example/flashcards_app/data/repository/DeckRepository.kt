@@ -9,17 +9,15 @@ import javax.inject.Inject
 class DeckRepository @Inject constructor(
     private val deckDao: DeckDao
 ){
-    suspend fun insertDeck(deck: DeckEntity){
-        return deckDao.insertDeck(deck)
+    suspend fun insertDeck(name:String) : Long {
+        return deckDao.insertDeck(DeckEntity(name=name))
     }
 
     suspend fun deleteDeck(deck: DeckEntity){
         return deckDao.deleteDeck(deck)
     }
 
-    fun getAllDecks() : Flow<List<DeckEntity>>{
-        return deckDao.getAllDecks()
-    }
+    val getAllDecks : Flow<List<DeckEntity>> = deckDao.getAllDecks()
 
     suspend fun getDeckById(id: Int) : DeckEntity?{
         return deckDao.getDeckById(id)
@@ -28,5 +26,6 @@ class DeckRepository @Inject constructor(
     fun getDecksWithStats(): Flow<List<DeckSummary>> {
         return deckDao.getDecksWithStats()
     }
+
 
 }

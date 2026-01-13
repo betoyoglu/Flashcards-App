@@ -41,6 +41,7 @@ fun DashboardScreen(navController: NavController, viewModel: DashboardViewModel 
     val cardList by viewModel.cards.collectAsStateWithLifecycle()
 
     DashboardContent(
+        navController = navController,
         studiedCardCount = studiedCards.size,
         deckCount = deckList.size,
         deckList = deckList,
@@ -51,6 +52,7 @@ fun DashboardScreen(navController: NavController, viewModel: DashboardViewModel 
 
 @Composable
 fun DashboardContent(
+    navController: NavController,
     studiedCardCount: Int,
     deckCount: Int,
     reviewCount: Int,
@@ -73,7 +75,7 @@ fun DashboardContent(
         ) {
             StatusCards(
                 count = studiedCardCount,
-                description = "Studied cards",
+                description = "Studied Cards",
                 containerColor = purple,
                 contentColor = darkPurple,
             )
@@ -99,16 +101,15 @@ fun DashboardContent(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
             if(reviewCount > 0){
-                items(deckList){decks ->
+                item {
                     DeckCard(
                         deckName = "Need To Review Again",
                         viewedCards = 0,
                         totalCards = reviewCount,
                         onClick = {
-
+                            navController.navigate("review_screen")
                         }
                     )
-
                 }
             }
 
@@ -118,7 +119,7 @@ fun DashboardContent(
                     viewedCards = decks.viewedCards,
                     totalCards = decks.totalCards,
                     onClick = {
-
+                        navController.navigate("flashcard_screen/${decks.id}")
                     }
                 )
 
@@ -131,7 +132,7 @@ fun DashboardContent(
 }
 
 
-
+/*
 @Preview
 @Composable
 fun DashboardPreview(){
@@ -145,3 +146,4 @@ fun DashboardPreview(){
         )
     )
 }
+ */

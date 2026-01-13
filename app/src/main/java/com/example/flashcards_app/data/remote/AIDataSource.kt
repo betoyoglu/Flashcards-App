@@ -13,7 +13,8 @@ class AIDataSource @Inject constructor(){
         )
 
         val prompt = """
-            You are a teacher. Create a list of flashcards from the following text. The list must have 10 questions and answers.
+            You are a teacher. Create a list of flashcards from the following text. The list must have 5 questions and answers.
+            Do not make the questions or answers too long.
             The text is about: $deckName
             
             Return the output strictly in the following JSON format (no markdown, no backticks):
@@ -38,7 +39,7 @@ class AIDataSource @Inject constructor(){
             return Json.decodeFromString<List<AIResponse>>(cleanJson)
         }catch (e: Exception){
             e.printStackTrace()
-            println("AI Hatası: ${e.message}")
+            println("AI Error: ${e.message}")
 
             return emptyList()
         }

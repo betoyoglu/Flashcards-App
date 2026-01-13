@@ -3,7 +3,6 @@ package com.example.flashcards_app.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -12,12 +11,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.flashcards_app.ui.components.BottomBar
 import com.example.flashcards_app.ui.screens.dashboard.DashboardScreen
+import com.example.flashcards_app.ui.screens.flashcard.FlashcardScreen
+import com.example.flashcards_app.ui.screens.review.ReviewScreen
 import com.example.flashcards_app.ui.screens.upload.UploadScreen
 
 @Composable
@@ -52,12 +55,33 @@ fun Navigation(){
             composable(BottomNavItem.Dashboard.route){
                 DashboardScreen(navController = navController, viewModel = hiltViewModel())
             }
-            composable(FabNav.CreateDeck){
+            composable(OtherNavs.CREATEDECK){
                 UploadScreen(
                     onBackClick = { navController.popBackStack() },
                     onSaveClick = {
                         navController.popBackStack()
                     }
+                )
+            }
+
+            composable("${ OtherNavs.FLASHCARDSCREEN }/{deckId}",
+                arguments = listOf(
+                    navArgument("deckId") {type = NavType.IntType}
+                )
+            ){ backStackEntry ->
+                val deckId = backStackEntry.arguments?.getInt("deckId") ?: 0
+
+                FlashcardScreen(
+                    navController = navController,
+                    viewModel = hiltViewModel(),
+                    deckId =deckId
+                )
+            }
+
+            composable(OtherNavs.REVIEWSCREEN){
+                ReviewScreen(
+                    navController = navController,
+                    viewModel = hiltViewModel()
                 )
             }
         }

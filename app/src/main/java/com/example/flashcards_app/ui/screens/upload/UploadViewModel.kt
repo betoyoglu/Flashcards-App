@@ -4,7 +4,10 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.flashcards_app.data.local.entity.CardEntity
 import com.example.flashcards_app.data.repository.AIRepository
+import com.example.flashcards_app.data.repository.CardRepository
+import com.example.flashcards_app.data.repository.DeckRepository
 import com.example.flashcards_app.util.uriToFile
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +18,10 @@ import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
-class UploadViewModel @Inject constructor(private val repository: AIRepository) : ViewModel() {
+class UploadViewModel @Inject constructor(
+    private val AIrepository: AIRepository,
+    private val deckRepository: DeckRepository,
+    private val cardRepository: CardRepository) : ViewModel() {
 
     //deck adı
     private val _deckName = MutableStateFlow("")
@@ -48,9 +54,28 @@ class UploadViewModel @Inject constructor(private val repository: AIRepository) 
 
         viewModelScope.launch {
             try {
-                val response = repository.generateFlashcards(currentFile, deckNameVal)
+                val aiResponseList = AIrepository.generateFlashcards(currentFile, deckNameVal)
 
-                println("Gemini cevabı: $response")
+               if(aiResponseList.isEmpty()){
+                   println("AI returned empty list")
+                   return@launch
+               }
+
+                //deste olmadan cardları bir yere bağlayamayacağımızdan
+                val newDeckId = deckRepository.insertDeck(deckNameVal)
+
+                //response'u cardlara dönüştür
+                val cardEntities = aiResponseList.map { aiCard ->
+                    CardEntity(
+                        deckId = newDeckId.toInt(),
+                        question = aiCard.question,
+                        answer = aiCard.answer
+                    )
+                }
+
+                cardRepository.saveCards(cardEntities)
+
+                println("Done! ${cardEntities.size} cards created")
 
             } catch (e: Exception){
                 e.printStackTrace()

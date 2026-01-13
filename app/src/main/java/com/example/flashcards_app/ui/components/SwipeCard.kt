@@ -1,5 +1,6 @@
 package com.example.flashcards_app.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,16 +13,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.alexstyl.swipeablecard.Direction
 import com.alexstyl.swipeablecard.ExperimentalSwipeableCardApi
+import com.alexstyl.swipeablecard.SwipeableCardState
 import com.alexstyl.swipeablecard.rememberSwipeableCardState
 import com.alexstyl.swipeablecard.swipableCard
 import com.example.flashcards_app.R
@@ -29,11 +36,13 @@ import com.example.flashcards_app.R
 @OptIn(ExperimentalSwipeableCardApi::class)
 @Composable
 fun SwipeCard(
+    state: SwipeableCardState,
     questionNo: String,
     question: String,
-    answer: String
+    answer: String,
+    modifier: Modifier = Modifier
 ){
-    val state = rememberSwipeableCardState()
+  var isFlipped by remember { mutableStateOf(false) }
 
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
@@ -43,10 +52,10 @@ fun SwipeCard(
         colors = CardDefaults.cardColors(
             containerColor = Color.White
         ),
-        modifier = Modifier
-            .size(width = 200.dp, height = 200.dp)
+        modifier = modifier
+            .size(width = 350.dp, height = 400.dp)
             .swipableCard(
-                blockedDirections = listOf(Direction.Down),
+                blockedDirections = listOf(Direction.Down, Direction.Up),
                 state = state,
                 onSwiped = { direction ->
                     println("The card was swiped to $direction")
@@ -55,27 +64,28 @@ fun SwipeCard(
                     println("The swiping was cancelled")
                 }
             )
+            .clickable{isFlipped = !isFlipped}
     ){
         Column(
+           verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxHeight()
-                .padding(start = 8.dp, end = 8.dp, top = 13.dp, bottom = 8.dp)
+                .padding(start = 16.dp, end = 16.dp)
         ) {
             Text(
                 text = questionNo,
                 fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
-                fontSize = 17.sp
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = question,
+                text = if (isFlipped) answer else question,
                 fontFamily = FontFamily(Font(R.font.googlesans_regular)),
-                fontSize = 22.sp,
-                maxLines = 2
+                fontSize = 20.sp,
             )
         }
     }
@@ -88,7 +98,9 @@ fun SwipeCard(
 fun SwipeCardPreview(){
     SwipeCard(
         questionNo = "1",
-        question = "What is the capital of Turkey?",
-        answer = "Ankara"
+        question = "What's the supercontinent broke apart to create the continents we know today?" ,
+        answer = "Ankara",
+        state = rememberSwipeableCardState(),
+        modifier = Modifier
     )
 }
