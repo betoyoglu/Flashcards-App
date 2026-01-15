@@ -106,4 +106,6 @@ dependencies {
 
     implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
 
+    implementation("com.airbnb.android:lottie-compose:6.3.0")
+
 }

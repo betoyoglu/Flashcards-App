@@ -64,17 +64,20 @@ fun Navigation(){
                 )
             }
 
-            composable("${ OtherNavs.FLASHCARDSCREEN }/{deckId}",
+            composable("${ OtherNavs.FLASHCARDSCREEN }/{deckId}/{deckName}",
                 arguments = listOf(
-                    navArgument("deckId") {type = NavType.IntType}
+                    navArgument("deckId") {type = NavType.IntType},
+                    navArgument("deckName") {type = NavType.StringType}
                 )
             ){ backStackEntry ->
                 val deckId = backStackEntry.arguments?.getInt("deckId") ?: 0
+                val deckName = backStackEntry.arguments?.getString("deckName") ?: ""
 
                 FlashcardScreen(
                     navController = navController,
                     viewModel = hiltViewModel(),
-                    deckId =deckId
+                    deckId =deckId,
+                    deckName = deckName
                 )
             }
 

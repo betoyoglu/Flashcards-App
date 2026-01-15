@@ -7,6 +7,7 @@ import com.example.flashcards_app.data.repository.CardRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,25 +21,25 @@ class FlashcardViewModel @Inject constructor(private val cardRepository: CardRep
     //hangi deste olduğunu bilmek için
     fun loadDeck(deckId: Int){
         viewModelScope.launch {
-            cardRepository.getCardsByDeckId(deckId).collect { cards->
+            val cards = cardRepository.getCardsByDeckId(deckId).first()  //veriyi yalnızca bir kere almak için
                 _uiState.value = cards
-            }
+
         }
     }
 
     //sağa kaydırılırsa
     fun markAsLearned(card: CardEntity){
         viewModelScope.launch {
-            cardRepository.updateCardStatus(card, isLearned = true)
             removeCardFromList(card)
+            cardRepository.updateCardStatus(card, isLearned = true)
         }
     }
 
     //sola kaydırılırsa
     fun markAsReview(card: CardEntity){
         viewModelScope.launch {
-            cardRepository.updateCardStatus(card, isLearned = false)
             removeCardFromList(card)
+            cardRepository.updateCardStatus(card, isLearned = false)
         }
     }
 

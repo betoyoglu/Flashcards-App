@@ -48,12 +48,12 @@ fun SwipeCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
-        shape = RoundedCornerShape(6.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Color(0xFFEEEEEE)
         ),
         modifier = modifier
-            .size(width = 350.dp, height = 400.dp)
+            .size(width = 350.dp, height = 350.dp)
             .swipableCard(
                 blockedDirections = listOf(Direction.Down, Direction.Up),
                 state = state,
@@ -64,7 +64,6 @@ fun SwipeCard(
                     println("The swiping was cancelled")
                 }
             )
-            .clickable{isFlipped = !isFlipped}
     ){
         Column(
            verticalArrangement = Arrangement.Center,

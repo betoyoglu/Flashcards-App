@@ -119,7 +119,7 @@ fun DashboardContent(
                     viewedCards = decks.viewedCards,
                     totalCards = decks.totalCards,
                     onClick = {
-                        navController.navigate("flashcard_screen/${decks.id}")
+                        navController.navigate("flashcard_screen/${decks.id}/${decks.name}")
                     }
                 )
 
