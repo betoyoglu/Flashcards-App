@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusModifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -63,6 +64,7 @@ import com.example.flashcards_app.ui.components.SwipeCard
 import com.example.flashcards_app.ui.navigation.BottomNavItem.Dashboard.title
 import com.example.flashcards_app.ui.theme.darkOrange
 import com.example.flashcards_app.ui.theme.darkPurple
+import com.example.flashcards_app.ui.theme.gradientColorList
 import com.example.flashcards_app.ui.theme.orange
 import com.example.flashcards_app.ui.theme.purple
 import kotlinx.coroutines.launch
@@ -78,12 +80,6 @@ fun FlashcardScreen(
     LaunchedEffect(deckId) {
         viewModel.loadDeck(deckId)
     }
-
-    val gradientColorList = listOf(
-        Color(0xFF7978FF),
-        Color(0xFF4649FF),
-        Color(0xFF1D1CE5),
-    )
 
     val cards by viewModel.uiState.collectAsStateWithLifecycle()
     val sortedCards = remember(cards) { cards.sortedByDescending { it.id } }
@@ -155,7 +151,7 @@ fun FlashcardScreen(
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
-                            text = "Congrats! You've studied all the cards in $deckName deck." +
+                            text = "Congrats! You've studied all the cards in '$deckName' deck." +
                             " You can continue learning by checking out other decks!",
                             fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
                             textAlign = TextAlign.Center,
@@ -181,37 +177,49 @@ fun FlashcardScreen(
                     }
 
                 } else {
-                    sortedCards.forEach { card ->
+                    sortedCards.forEachIndexed { index, card ->
                         key(card.id) {
                             val state = rememberSwipeableCardState()
-                            val showAnswer = (card.id == topCard?.id) && isCurrentFlipped
+                            val distance = sortedCards.size - 1 - index
 
-                            if (state.swipedDirection != null) {
-                                LaunchedEffect(card, state.swipedDirection) {
-                                    if (state.swipedDirection == Direction.Right) {
-                                        viewModel.markAsLearned(card)
-                                    } else if (state.swipedDirection == Direction.Left) {
-                                        viewModel.markAsReview(card)
+                            if (distance < 3) {
+                                val showAnswer = (card.id == topCard?.id) && isCurrentFlipped
+                                val scale = 1f - (distance * 0.05f)
+                                val verticalOffset = (distance * 12).dp
+
+                                if (state.swipedDirection != null) {
+                                    LaunchedEffect(card, state.swipedDirection) {
+                                        if (state.swipedDirection == Direction.Right) {
+                                            viewModel.markAsLearned(card)
+                                        } else if (state.swipedDirection == Direction.Left) {
+                                            viewModel.markAsReview(card)
+                                        }
+
+                                        isCurrentFlipped = false
+                                        if (swipeRequest?.first == card.id) swipeRequest = null
                                     }
-
-                                    isCurrentFlipped = false
-                                    if (swipeRequest?.first == card.id) swipeRequest = null
                                 }
-                            }
 
-                            if (swipeRequest?.first == card.id) {
-                                LaunchedEffect(swipeRequest) {
-                                    swipeRequest?.second?.let { state.swipe(it) }
+                                if (swipeRequest?.first == card.id) {
+                                    LaunchedEffect(swipeRequest) {
+                                        swipeRequest?.second?.let { state.swipe(it) }
+                                    }
                                 }
-                            }
 
-                            Box {
-                                SwipeCard(
-                                    state = state,
-                                    questionNo = card.id.toString(),
-                                    question = if (showAnswer) card.answer else card.question,
-                                    answer = if (showAnswer) card.answer else "...",
-                                )
+                                Box(
+                                    modifier = Modifier.graphicsLayer {
+                                        scaleX = scale
+                                        scaleY = scale
+                                        translationY = verticalOffset.toPx()
+                                    }
+                                ) {
+                                    SwipeCard(
+                                        state = state,
+                                        questionNo = card.id.toString(),
+                                        question = if (showAnswer) card.answer else card.question,
+                                        answer = if (showAnswer) card.answer else "...",
+                                    )
+                                }
                             }
                         }
                     }

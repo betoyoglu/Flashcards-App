@@ -15,3 +15,9 @@ val darkPurple = Color(0xFF5C3E94)
 
 val orange = Color(0xFFFEECE2)
 val darkOrange = Color(0xFFFA891A)
+
+val gradientColorList = listOf(
+    Color(0xFF7978FF),
+    Color(0xFF4649FF),
+    Color(0xFF1D1CE5),
+)
