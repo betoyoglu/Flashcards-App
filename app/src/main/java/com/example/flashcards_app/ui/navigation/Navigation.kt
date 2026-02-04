@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +21,8 @@ import androidx.navigation.navArgument
 import com.example.flashcards_app.ui.components.BottomBar
 import com.example.flashcards_app.ui.screens.dashboard.DashboardScreen
 import com.example.flashcards_app.ui.screens.flashcard.FlashcardScreen
+import com.example.flashcards_app.ui.screens.login.LoginScreen
+import com.example.flashcards_app.ui.screens.login.SignupScreen
 import com.example.flashcards_app.ui.screens.review.ReviewScreen
 import com.example.flashcards_app.ui.screens.upload.UploadScreen
 
@@ -49,11 +52,21 @@ fun Navigation(){
     ){innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = BottomNavItem.Dashboard.route,
+            startDestination = OtherNavs.SIGNUPSCREEN,
             modifier = Modifier.padding(innerPadding)
         ){
+            composable(OtherNavs.SIGNUPSCREEN){
+                SignupScreen(navController = navController)
+            }
+            composable(OtherNavs.LOGINSCREEN){
+                LoginScreen(navController = navController)
+            }
             composable(BottomNavItem.Dashboard.route){
                 DashboardScreen(navController = navController, viewModel = hiltViewModel())
+            }
+
+            composable(BottomNavItem.Review.route){
+                ReviewScreen(navController = navController, viewModel = hiltViewModel())
             }
             composable(OtherNavs.CREATEDECK){
                 UploadScreen(

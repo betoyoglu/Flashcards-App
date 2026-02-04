@@ -1,5 +1,6 @@
 package com.example.flashcards_app.ui.screens.dashboard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,14 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,6 +69,28 @@ fun DashboardContent(
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.dots),
+                contentDescription = "Dots",
+                modifier = Modifier.size(24.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Image(
+                painter = painterResource(id = R.drawable.giraffe_icon),
+                contentDescription = "icon",
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        }
+
         Text(
             text = "Dashboard",
             style = MaterialTheme.typography.headlineMedium,
@@ -132,18 +162,18 @@ fun DashboardContent(
 }
 
 
-/*
+
 @Preview
 @Composable
 fun DashboardPreview(){
     DashboardContent(
+        navController = NavController(LocalContext.current),
         studiedCardCount = 12,
         deckCount = 4,
         reviewCount = 5,
         deckList = listOf(
-            DeckSummary(1, "History", 20, 10, 0),
+            DeckSummary( 1, "History", 20, 10, 0),
             DeckSummary(2, "Arts", 15, 2, 1)
         )
     )
 }
- */

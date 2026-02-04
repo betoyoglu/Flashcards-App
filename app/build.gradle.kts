@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hiltAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.serialization)
+    id("com.google.gms.google-services")
 }
 
 val localProperties = Properties()
@@ -30,6 +31,9 @@ android {
 
         val apiKey = localProperties.getProperty("GEMINI_API_KEY") ?: ""
         buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+
+        val webClientId = localProperties.getProperty("webClientId") ?: ""
+        buildConfigField("String", "webClientId", "\"$webClientId\"")
     }
 
     buildTypes {
@@ -107,5 +111,12 @@ dependencies {
     implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
 
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
+    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
 
 }
