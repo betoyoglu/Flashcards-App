@@ -21,3 +21,11 @@ val gradientColorList = listOf(
     Color(0xFF4649FF),
     Color(0xFF1D1CE5),
 )
+
+val White = Color(0xFFFFFFFF)
+val Yellow = Color(0xFFFFCB66)
+val YellowVariant = Color(0xFFFFDE9F)
+
+val gradientPurple =   Color(0xFF7978FF)
+val gradientBluePurple = Color(0xFF4649FF)
+val gradientBlue = Color(0xFF1D1CE5)

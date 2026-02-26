@@ -33,7 +33,8 @@ android {
         buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
 
         val webClientId = localProperties.getProperty("webClientId") ?: ""
-        buildConfigField("String", "webClientId", "\"$webClientId\"")
+        buildConfigField("String", "webClientId", webClientId)
+
     }
 
     buildTypes {

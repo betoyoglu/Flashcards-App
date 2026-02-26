@@ -19,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
@@ -36,6 +38,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.flashcards_app.BuildConfig
 import com.example.flashcards_app.R
+import com.example.flashcards_app.ui.theme.gradientBlue
+import com.example.flashcards_app.ui.theme.gradientBluePurple
+import com.example.flashcards_app.ui.theme.purple
+import com.example.flashcards_app.util.movingStripesBackground
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.SignInButton
@@ -87,16 +93,21 @@ fun LoginScreen(navController: NavController){
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp),
+        .movingStripesBackground(
+            stripeColor = gradientBlue,
+            backgroundColor = gradientBluePurple
+        )
+        .padding(24.dp),
         contentAlignment = Alignment.Center
     ){
         Column (
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.Start
         ){
             Text(
                 text = "Log In to Continue",
                 style = MaterialTheme.typography.headlineMedium,
-                fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
+                fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
+                color = purple
             )
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -107,10 +118,17 @@ fun LoginScreen(navController: NavController){
                 trailingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.email_icon),
-                        contentDescription = "Email Icon"
+                        contentDescription = "Email Icon",
+                        tint = Color.White
                     )
                 },
-                label = {Text(text = "Email", fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.White,
+                    unfocusedIndicatorColor = Color.White,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
+                label = {Text(text = "Email", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
@@ -123,10 +141,17 @@ fun LoginScreen(navController: NavController){
                 trailingIcon = {
                     Icon(
                         painter = painterResource(id = R.drawable.password),
-                        contentDescription = "Email Icon"
+                        contentDescription = "Email Icon",
+                        tint = Color.White
                     )
                 },
-                label = {Text(text = "Password", fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Gray,
+                    unfocusedIndicatorColor = Color.White,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
+                label = {Text(text = "Password", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
                 visualTransformation = PasswordVisualTransformation(),
                 modifier = Modifier.fillMaxWidth()
@@ -148,7 +173,11 @@ fun LoginScreen(navController: NavController){
                             }
                         }
                 },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = purple,
+                    contentColor = gradientBluePurple
+                )
             ) {
                 Text(
                     text = "Log In"
@@ -216,9 +245,9 @@ fun LoginScreen(navController: NavController){
                     }
                 )
             }
-            TextButton(onClick = {forgotPasswordDialogBox = true}
+            TextButton(onClick = {forgotPasswordDialogBox = true}, modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Forgot Password?")
+                Text("Forgot Password?", color = purple)
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -227,8 +256,10 @@ fun LoginScreen(navController: NavController){
                 navController.navigate("signup_screen"){
                     popUpTo("login_screen"){inclusive=true}
                 }
-            }) {
-                Text(text= "Don't have an account? Sign up.")
+            },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(text= "Don't have an account? Sign up.", color = purple)
             }
         }
 
