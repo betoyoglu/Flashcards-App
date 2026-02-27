@@ -44,12 +44,13 @@ import com.example.flashcards_app.ui.theme.gradientBluePurple
 import com.example.flashcards_app.ui.theme.gradientPurple
 import com.example.flashcards_app.ui.theme.purple
 import com.example.flashcards_app.util.movingStripesBackground
-import com.example.flashcards_app.util.simpleGradient
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.firestore
 
 @Composable
 fun SignupScreen(navController: NavController){
+    var username by remember {mutableStateOf("")}
     var email by remember { mutableStateOf("") }
     var password by remember {mutableStateOf("")}
     val context = LocalContext.current //toast
@@ -74,6 +75,29 @@ fun SignupScreen(navController: NavController){
             )
 
             Spacer(modifier = Modifier.height(45.dp))
+
+            OutlinedTextField(
+                value = username,
+                onValueChange = {username = it},
+                trailingIcon = {
+                    Icon(
+                        painter = painterResource(id = R.drawable.username_icon),
+                        contentDescription = "Username Icon",
+                        tint = Color.White
+                    )
+                },
+                colors = TextFieldDefaults.colors(
+                    focusedIndicatorColor = Color.Gray,
+                    unfocusedIndicatorColor = Color.White,
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent
+                ),
+                label = {Text(text = "Username", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedTextField(
                 value = email,
@@ -103,7 +127,7 @@ fun SignupScreen(navController: NavController){
                 onValueChange = {password = it},
                 trailingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.password),
+                        painter = painterResource(id = R.drawable.password_icon),
                         contentDescription = "Password Icon",
                         tint = Color.White
                     )
@@ -124,17 +148,36 @@ fun SignupScreen(navController: NavController){
 
             Button(
                 onClick = {
-                    Firebase.auth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener { task ->
-                            if(task.isSuccessful){
-                                Toast.makeText(context, "Signup is successful! Please log in.", Toast.LENGTH_SHORT).show()
-                                navController.navigate("login_screen"){
-                                    popUpTo("signup_screen"){inclusive = true}
+                    if (email.isNotEmpty() && password.isNotEmpty() && username.isNotEmpty()) {
+                        Firebase.auth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener { task ->
+                                if(task.isSuccessful){
+                                    val userId = task.result?.user?.uid
+                                    val db = Firebase.firestore
+
+                                    val userMap = hashMapOf(
+                                        "username" to username,
+                                        "email" to email,
+                                        "uid" to userId
+                                    )
+
+                                    if (userId != null) {
+                                        db.collection("users").document(userId)
+                                            .set(userMap)
+                                            .addOnSuccessListener {
+                                                Toast.makeText(context, "Welcome $username!", Toast.LENGTH_SHORT).show()
+                                                navController.navigate("login_screen"){
+                                                    popUpTo("signup_screen"){inclusive = true}
+                                                }
+                                            }
+                                    }
+                                } else {
+                                    Toast.makeText(context, task.exception?.message ?: "Signup failed!", Toast.LENGTH_SHORT).show()
                                 }
-                            }else{
-                                Toast.makeText(context, task.exception?.message ?: "Signup is failed!", Toast.LENGTH_SHORT).show()
                             }
-                        }
+                    } else {
+                        Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                    }
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(

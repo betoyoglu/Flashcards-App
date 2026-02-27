@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -47,13 +49,15 @@ fun DashboardScreen(navController: NavController, viewModel: DashboardViewModel 
     val studiedCards by viewModel.studiedCards.collectAsStateWithLifecycle()
     val reviewCards by viewModel.reviewCards.collectAsStateWithLifecycle()
     val cardList by viewModel.cards.collectAsStateWithLifecycle()
+    val username by viewModel.username.collectAsStateWithLifecycle()
 
     DashboardContent(
         navController = navController,
         studiedCardCount = studiedCards.size,
         deckCount = deckList.size,
         deckList = deckList,
-        reviewCount = reviewCards.size
+        reviewCount = reviewCards.size,
+        username = username
     )
 
 }
@@ -64,7 +68,8 @@ fun DashboardContent(
     studiedCardCount: Int,
     deckCount: Int,
     reviewCount: Int,
-    deckList: List<DeckSummary> = emptyList()
+    deckList: List<DeckSummary> = emptyList(),
+    username : String
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp)
@@ -73,10 +78,12 @@ fun DashboardContent(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.dots),
-                contentDescription = "Dots",
-                modifier = Modifier.size(24.dp)
+            Text(
+                text = "Welcome back $username !",
+                style = MaterialTheme.typography.displaySmall,
+                color = Color.Black,
+                fontSize = 12.sp,
+                fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
             )
 
             Spacer(modifier = Modifier.weight(1f))
@@ -174,6 +181,7 @@ fun DashboardPreview(){
         deckList = listOf(
             DeckSummary( 1, "History", 20, 10, 0),
             DeckSummary(2, "Arts", 15, 2, 1)
-        )
+        ),
+        username = "Test"
     )
 }

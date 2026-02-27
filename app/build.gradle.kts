@@ -64,7 +64,7 @@ ksp {
 }
 
 dependencies {
-
+    // Temel Bileşenler
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -73,6 +73,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+
+    // Firebase (Version Catalog üzerinden temiz kullanım)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+
+    // Test ve Debug
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -81,14 +88,11 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    // Hilt, Retrofit, Coil
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-
-    // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
-
-    // Coil
     implementation(libs.coil.compose)
 
     // Navigation & ViewModel
@@ -101,23 +105,13 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
 
-    // Google Gemini AI SDK
+    // Üçüncü Parti Kütüphaneler
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-
-    // Android PDFBox
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
-
     implementation(libs.kotlinx.serialization.json)
-
     implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
-
     implementation("com.airbnb.android:lottie-compose:6.3.0")
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
 
-    implementation(platform("com.google.firebase:firebase-bom:34.8.0"))
-    implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
-    implementation("androidx.navigation:navigation-compose:2.7.6")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
+    // NOT: En alttaki tekrarlanan Firebase ve Navigation satırlarını sildim!
 }

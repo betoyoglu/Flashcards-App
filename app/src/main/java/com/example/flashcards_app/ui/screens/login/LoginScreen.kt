@@ -140,7 +140,7 @@ fun LoginScreen(navController: NavController){
                 onValueChange = {password = it},
                 trailingIcon = {
                     Icon(
-                        painter = painterResource(id = R.drawable.password),
+                        painter = painterResource(id = R.drawable.password_icon),
                         contentDescription = "Email Icon",
                         tint = Color.White
                     )
