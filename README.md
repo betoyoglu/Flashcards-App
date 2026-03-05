@@ -7,7 +7,7 @@ through an intuitive, Tinder-style swipe interface.
 
 * **AI Deck Generation:** Instantly create comprehensive flashcard decks using the **Gemini API**.
 * **Secure Authentication:** User signup and login seamlessly handled by **Firebase Authentication**.
-* **Interactive Learning:** * Tap to flip cards and reveal answers.
+* **Interactive Learning:** Tap to flip cards and reveal answers.
   * Swipe right to mark as "Learned" or swipe left to "Review Again".
 * **Dashboard & Stats:** Track your overall progress, total created decks, and cards that need a review.
 * **Modern UI/UX:** Fully built with **Jetpack Compose** using Material Design 3 guidelines and smooth gradient backgrounds.
