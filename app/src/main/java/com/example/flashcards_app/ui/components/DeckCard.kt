@@ -56,6 +56,7 @@ fun DeckCard(
                     text = deckName,
                     fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
                     fontSize = 24.sp,
+                    color = Color.Black,
                 )
 
                 Text(

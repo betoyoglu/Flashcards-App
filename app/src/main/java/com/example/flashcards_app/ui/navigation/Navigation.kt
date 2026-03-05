@@ -1,15 +1,21 @@
 package com.example.flashcards_app.ui.navigation
 
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
@@ -25,6 +31,8 @@ import com.example.flashcards_app.ui.screens.login.LoginScreen
 import com.example.flashcards_app.ui.screens.login.SignupScreen
 import com.example.flashcards_app.ui.screens.review.ReviewScreen
 import com.example.flashcards_app.ui.screens.upload.UploadScreen
+import com.example.flashcards_app.ui.theme.darkPurple
+import com.example.flashcards_app.ui.theme.gradientBluePurple
 
 @Composable
 fun Navigation(){
@@ -33,19 +41,30 @@ fun Navigation(){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold (
+    val showBottomBarAndFab = currentRoute == BottomNavItem.Dashboard.route ||
+            currentRoute == BottomNavItem.Review.route
+
+    Scaffold(
         bottomBar = {
-            if(currentRoute == BottomNavItem.Dashboard.route || currentRoute == BottomNavItem.Review.route){
-                BottomBar(navController= navController)
+            if (showBottomBarAndFab) {
+                BottomBar(navController = navController)
             }
         },
+        floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            if(currentRoute == BottomNavItem.Dashboard.route){
-                LargeFloatingActionButton(
-                    onClick = {navController.navigate("create_deck")},
-                    shape = CircleShape
+            if (showBottomBarAndFab) {
+                FloatingActionButton(
+                    shape = CircleShape,
+                    onClick = {
+                        navController.navigate(OtherNavs.CREATEDECK)
+                    },
+                    containerColor = gradientBluePurple,
+                    contentColor = Color.White,
+                    modifier = Modifier
+                        .size(64.dp)
+                        .offset(y = 56.dp)
                 ) {
-                    Icon(Icons.Filled.Create, "add")
+                    Icon(Icons.Filled.Create, contentDescription = "Create")
                 }
             }
         }
@@ -71,8 +90,10 @@ fun Navigation(){
             composable(OtherNavs.CREATEDECK){
                 UploadScreen(
                     onBackClick = { navController.popBackStack() },
-                    onSaveClick = {
-                        navController.popBackStack()
+                    onNavigateToFlashcards = { deckId, deckName ->
+                        navController.navigate("${OtherNavs.FLASHCARDSCREEN}/$deckId/$deckName") {
+                            popUpTo(BottomNavItem.Dashboard.route)
+                        }
                     }
                 )
             }

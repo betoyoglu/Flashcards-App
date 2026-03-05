@@ -74,7 +74,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-    // Firebase (Version Catalog üzerinden temiz kullanım)
+    // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
@@ -112,6 +112,4 @@ dependencies {
     implementation("com.alexstyl.swipeablecard:swipeablecard:0.1.0")
     implementation("com.airbnb.android:lottie-compose:6.3.0")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
-
-    // NOT: En alttaki tekrarlanan Firebase ve Navigation satırlarını sildim!
 }

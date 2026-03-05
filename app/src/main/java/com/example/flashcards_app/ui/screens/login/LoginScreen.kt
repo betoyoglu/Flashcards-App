@@ -126,7 +126,10 @@ fun LoginScreen(navController: NavController){
                     focusedIndicatorColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
                 ),
                 label = {Text(text = "Email", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
@@ -149,7 +152,10 @@ fun LoginScreen(navController: NavController){
                     focusedIndicatorColor = Color.Gray,
                     unfocusedIndicatorColor = Color.White,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
                 ),
                 label = {Text(text = "Password", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
@@ -180,7 +186,8 @@ fun LoginScreen(navController: NavController){
                 )
             ) {
                 Text(
-                    text = "Log In"
+                    text = "Log In",
+                    fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
                 )
             }
 
@@ -247,7 +254,7 @@ fun LoginScreen(navController: NavController){
             }
             TextButton(onClick = {forgotPasswordDialogBox = true}, modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Forgot Password?", color = purple)
+                Text("Forgot Password?", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))
             }
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -259,7 +266,7 @@ fun LoginScreen(navController: NavController){
             },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text(text= "Don't have an account? Sign up.", color = purple)
+                Text(text= "Don't have an account? Sign up.", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))
             }
         }
 

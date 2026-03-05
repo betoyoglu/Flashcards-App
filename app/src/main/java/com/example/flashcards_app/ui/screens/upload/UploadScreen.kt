@@ -14,10 +14,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -47,7 +52,7 @@ import com.example.flashcards_app.R
 @Composable
 fun UploadScreen(
     onBackClick : () -> Unit,
-    onSaveClick : () -> Unit,
+    onNavigateToFlashcards : (Int, String) -> Unit,
     viewModel: UploadViewModel = hiltViewModel()
 ){
     val deckName by viewModel.deckName.collectAsStateWithLifecycle()
@@ -62,6 +67,48 @@ fun UploadScreen(
         if(uri != null) {
             viewModel.onPdfSelected(uri, context)
         }
+    }
+
+    if (viewModel.showSuccessDialog) {
+        AlertDialog(
+            onDismissRequest = { viewModel.dismissDialog() },
+            title = {
+                Text(
+                    text = "Success!",
+                    fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "AI has successfully generated your flashcards. Would you like to start studying now?",
+                    fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.dismissDialog()
+                        viewModel.newDeckId?.let { id ->
+                            onNavigateToFlashcards(id, deckName)
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+                ) {
+                    Text("Go to Flashcards")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        viewModel.dismissDialog()
+                        onBackClick()
+                    }
+                ) {
+                    Text("Later")
+                }
+            }
+        )
     }
 
     Scaffold(
@@ -160,29 +207,33 @@ fun UploadScreen(
             Button(
                 onClick = {
                     viewModel.generateFlashcards()
-                    onSaveClick
                 },
-                enabled = deckName.isNotBlank() && pdfUri !=null, //deck adı boş değilse ve pdf seçilmişse
+                enabled = deckName.isNotBlank() && pdfUri != null && !viewModel.isLoading, //deck adı boş değilse ve pdf seçilmişse
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
                 shape = RoundedCornerShape(12.dp)
             ) {
-                Text(
-                    text = "Generate Flashcards",
-                    fontSize = 16.sp,
-                    fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
-                )
+                if (viewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "Generating via AI...",
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
+                    )
+                } else {
+                    Text(
+                        text = "Generate Flashcards",
+                        fontSize = 16.sp,
+                        fontFamily = FontFamily(Font(R.font.robotocondensed_regular))
+                    )
+                }
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun UploadScreenPreview(){
-    UploadScreen(
-        onBackClick = {},
-        onSaveClick = {}
-    )
 }

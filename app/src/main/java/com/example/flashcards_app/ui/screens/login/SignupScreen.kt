@@ -90,7 +90,10 @@ fun SignupScreen(navController: NavController){
                     focusedIndicatorColor = Color.Gray,
                     unfocusedIndicatorColor = Color.White,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
                 ),
                 label = {Text(text = "Username", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
@@ -113,7 +116,10 @@ fun SignupScreen(navController: NavController){
                     focusedIndicatorColor = Color.Gray,
                     unfocusedIndicatorColor = Color.White,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
                 ),
                 label = {Text(text = "Email", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,
@@ -136,7 +142,10 @@ fun SignupScreen(navController: NavController){
                     focusedIndicatorColor = Color.White,
                     unfocusedIndicatorColor = Color.White,
                     focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    cursorColor = Color.White
                 ),
                 label = {Text(text = "Password", color = purple, fontFamily = FontFamily(Font(R.font.robotocondensed_regular)))},
                 singleLine = true,

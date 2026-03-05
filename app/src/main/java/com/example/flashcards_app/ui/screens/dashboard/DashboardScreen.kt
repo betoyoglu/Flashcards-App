@@ -1,6 +1,7 @@
 package com.example.flashcards_app.ui.screens.dashboard
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -72,7 +73,10 @@ fun DashboardContent(
     username : String
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+            .padding(16.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -100,6 +104,7 @@ fun DashboardContent(
 
         Text(
             text = "Dashboard",
+            color = Color.Black,
             style = MaterialTheme.typography.headlineMedium,
             fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
             modifier = Modifier.padding(bottom = 24.dp)
@@ -128,6 +133,7 @@ fun DashboardContent(
 
         Text(
             text = "Decks",
+            color = Color.Black,
             style = MaterialTheme.typography.headlineSmall,
             fontFamily = FontFamily(Font(R.font.robotocondensed_regular)),
             modifier = Modifier.padding(bottom = 24.dp)
@@ -161,8 +167,6 @@ fun DashboardContent(
                 )
 
             }
-
-
 
         }
     }

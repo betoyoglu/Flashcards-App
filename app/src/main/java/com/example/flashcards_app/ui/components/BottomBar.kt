@@ -15,6 +15,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.flashcards_app.R
 import com.example.flashcards_app.ui.navigation.BottomNavItem
 import com.example.flashcards_app.ui.theme.darkPurple
+import com.example.flashcards_app.ui.theme.gradientBlue
+import com.example.flashcards_app.ui.theme.gradientBluePurple
 import com.example.flashcards_app.ui.theme.purple
 
 @Composable
@@ -55,7 +57,7 @@ fun BottomBar(navController: NavController){
                 label = { Text(text = item.title,
                     fontFamily = FontFamily(Font(R.font.googlesans_regular))) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = darkPurple,
+                    selectedIconColor = gradientBluePurple,
                     indicatorColor = purple
                 )
             )

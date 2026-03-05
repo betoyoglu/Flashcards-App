@@ -2,6 +2,9 @@ package com.example.flashcards_app.ui.screens.upload
 
 import android.content.Context
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.flashcards_app.data.local.entity.CardEntity
@@ -34,6 +37,15 @@ class UploadViewModel @Inject constructor(
     //geçici dosya - gemini'ya gidecek olan
     private var tempPdfFile : File? = null
 
+    var isLoading by mutableStateOf(false)
+        private set
+
+    var showSuccessDialog by mutableStateOf(false)
+        private set
+
+    var newDeckId by mutableStateOf<Int?>(null)
+        private set
+
     fun onDeckNameChange(newName:String){
         _deckName.value = newName
     }
@@ -54,20 +66,23 @@ class UploadViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
+                isLoading = true
+
                 val aiResponseList = AIrepository.generateFlashcards(currentFile, deckNameVal)
 
                if(aiResponseList.isEmpty()){
                    println("AI returned empty list")
+                   isLoading = false
                    return@launch
                }
 
                 //deste olmadan cardları bir yere bağlayamayacağımızdan
-                val newDeckId = deckRepository.insertDeck(deckNameVal)
+                val newDeckIdValue = deckRepository.insertDeck(deckNameVal).toInt()
 
                 //response'u cardlara dönüştür
                 val cardEntities = aiResponseList.map { aiCard ->
                     CardEntity(
-                        deckId = newDeckId.toInt(),
+                        deckId = newDeckIdValue,
                         question = aiCard.question,
                         answer = aiCard.answer
                     )
@@ -77,11 +92,20 @@ class UploadViewModel @Inject constructor(
 
                 println("Done! ${cardEntities.size} cards created")
 
+                isLoading = false
+                newDeckId = newDeckIdValue
+                showSuccessDialog = true
+
             } catch (e: Exception){
                 e.printStackTrace()
                 println("Hata oluştu: ${e.message}")
+                isLoading = false
             }
         }
+    }
+
+    fun dismissDialog() {
+        showSuccessDialog = false
     }
 }
 
